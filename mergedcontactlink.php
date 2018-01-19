@@ -42,8 +42,9 @@ function mergedcontactlink_civicrm_postInstall() {
     'label' => 'Contact Deleted by Merge',
     'return' => 'value',
   ));
-  $query = "SELECT ca.target_id as deleted_contact_id, cap.contact_id as new_contact_id
+  $query = "SELECT cac.contact_id as deleted_contact_id, cap.contact_id as new_contact_id
              FROM civicrm_activity ca
+             JOIN civicrm_activity_contact cac ON ca.id=cac.activity_id AND cac.record_type_id=3
              JOIN civicrm_activity_contact cap ON ca.parent_id=cap.activity_id AND cap.record_type_id=3
              WHERE (SELECT count(*) FROM civicrm_activity_contact WHERE record_type_id=1 AND activity_id=ca.id)=0
              AND ca.activity_type_id=%1 AND ca.id BETWEEN %2 AND %3";
